@@ -86,3 +86,55 @@ Bygge 10 høyintente nettsider for regnskapstjenester i Norge, der hver side kom
 - Minst 3 søkeord i topp 10 per side.
 - Minst 30 kvalifiserte leads totalt.
 - Konverteringsrate fra sidebesøk til lead: minimum 3 %.
+
+## Multi-site arkitektur (MVP)
+- `app/page.tsx` bruker nå delt innhold + delte seksjonskomponenter for høy gjenbruk.
+- `content/sites/*` holder side-spesifikk tekst, USP og metadata per nisje/geografi.
+- `components/sections/*` holder gjenbrukbare blokker (hero, kort, prosess, FAQ, leadskjema).
+- `app/admin/*` er adminpanel for leads og oppfølging.
+- `app/api/leads/*` er API-lag for innsamling/oppdatering av leads.
+- `lib/leads/*` samler validering og datatilgang.
+- `prisma/*` + `generated/prisma/*` håndterer datamodell og klient.
+
+## Drift KPI i adminpanel
+- Lead-volum per uke.
+- Antall nye leads (`ny`).
+- Møtegrad (`møte booket` / leads).
+- Kundegrad (`kunde` / møter).
+- KPI-visning har enkel filtrering på periode (`7d`, `30d`, `all`) og lead-status for rask operativ oppfølging.
+
+## Besluttet MVP-stack (fase 1)
+- Auth: credentials-basert superadmin med signert JWT-cookie.
+- Database: PostgreSQL via Prisma (hosted DB, egnet for Vercel og varig lead-lagring).
+- Datatilgang: Prisma Client kapslet i `lib/*`-lag for tydelig domeneansvar.
+- Beslutningsgrunnlag og oppgraderingskriterier er dokumentert i `MVP_STACK.md`.
+
+## Multi-site klargjøring for 10 sider
+- `content/sites/site-catalog.ts` er etablert med 10 prioriterte nisje-/geo-slugs fra strategi.
+- `app/[site]/page.tsx` genererer statiske sider per slug og bruker felles landingsside-mal.
+- `components/sites/site-landing-page.tsx` er felles rendrer for innhold + leadskjema.
+- Nye sider kan aktiveres med eget innhold per `contentKey` uten å bygge ny layout.
+
+## Deploy-klargjoring (MVP fase 1)
+- Runtime-variabler som ma settes i deploymiljo:
+  - `DATABASE_URL`
+  - `ADMIN_USERNAME`
+  - `ADMIN_PASSWORD_HASH`
+  - `AUTH_SECRET`
+  - `MCP_CRON_SECRET` (valgfri, men anbefalt)
+- Verifisert kvalitetssperre for release:
+  - `npm run lint` ma besta.
+  - `npm run build` ma besta.
+- Verifisert leadflyt for MVP:
+  - Innsending av lead via `POST /api/leads` lagrer lead i database.
+  - Admin-autoriserte kall kan lese leadliste og oppdatere status/notater via API.
+  - Aktivitetshistorikk opprettes ved statusendring og notatoppdatering.
+- Drift etter deploy:
+  - Daglig kontroll av KPI i admin (`ny`, `kontaktet`, `mote booket`, `kunde`, `tapt`).
+  - Daglig MCP-rapport fra `npm run mcp:daily-report` / Vercel cron for forbedringsloop.
+
+## Hovedside-strategi (domene)
+- `www.maxai.no` skal representere hovedsystemet (plattform + admin + operativ oversikt).
+- Nisje- og geografiinnhold publiseres som undersider under samme system (f.eks. `/{slug}`).
+- Forsiden skal kommunisere produkt/operasjonell verdi, ikke opptre som en enkelt nisje-side.
+- Eksisterende bygg-stavanger-innhold beholdes som eksempel/nisjeside i multi-site-portefoljen.

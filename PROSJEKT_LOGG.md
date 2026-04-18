@@ -28,3 +28,78 @@
 - Ny kvalitetssikring etter utvidelse:
   - `npm run lint` bestatt.
   - `npm run build` bestatt.
+
+## 2026-04-16 (MVP adminpanel + leadmaskin)
+- Etablert MVP-stack for appen:
+  - Prisma + SQLite (`prisma/schema.prisma`, migreringer og generert klient).
+  - Validering med `zod`.
+  - Enkel superadmin-autentisering med signert JWT-cookie (`jose`) og passord-hash (`bcryptjs`).
+- Implementert lead pipeline end-to-end:
+  - Offentlig skjema sender til `POST /api/leads`.
+  - Server-side validering og lagring av leads + aktivitetshistorikk.
+- Implementert adminpanel:
+  - Innlogging: `/admin/login`
+  - Dashboard med KPI-kort + leadliste: `/admin`
+  - Lead detalj + status/notater: `/admin/leads/[id]`
+  - Logout-endepunkt og route-beskyttelse via middleware.
+- Klargjort multi-site-struktur:
+  - Flyttet sideinnhold til `content/sites/build-stavanger.ts`.
+  - Splittet UI i gjenbrukbare seksjoner under `components/sections/*`.
+  - Oppdatert `app/page.tsx` til å bruke delt innhold og komponenter.
+- Miljø og drift:
+  - Oppdatert `.env`/`.env.example` med adminvariabler.
+  - Oppdatert `.gitignore` for miljøfiler, generert klient og lokal DB.
+  - Lagt til Prisma-scripts i `package.json`.
+- Verifisering:
+  - `npm run lint` bestatt.
+  - `npm run build` bestatt.
+- Lagt grunnlag for kontinuerlig forbedrings-MCP:
+  - Opprettet `mcp/continuous-improvement/README.md` med arbeidsloop.
+  - Opprettet `mcp/continuous-improvement/spec.json` med frekvens, KPI-er og kontrollregler.
+- Koblet MCP mot faktiske data:
+  - Ny analysemotor i `lib/mcp/continuous-improvement.ts` som leser leaddata fra Prisma.
+  - Nytt API-endepunkt `GET /api/mcp/daily-improvements` for daglig KPI-snapshot + tiltak.
+  - Ny lokal workerjobb `scripts/mcp/daily-improvements.mjs` som lager markdown-rapporter i `reports/continuous-improvement/`.
+  - Lagt til npm-script: `npm run mcp:daily-report`.
+  - Lagt til Vercel cron (`vercel.json`) for daglig kjøring kl. 08:00.
+- Formelt fastsatt MVP-stack i `MVP_STACK.md`:
+  - Auth: `bcryptjs` + `jose` (superadmin credentials + signert cookie).
+  - Database: Prisma + SQLite (`better-sqlite3`-adapter).
+  - Datatilgang: Prisma Client via domenelag i `lib/*`.
+- Fullført oppgavepakke for adminpanel + leadmaskin:
+  - Dashboard oppdatert med filtrering på periode og status i `app/admin/page.tsx`.
+  - Multi-site struktur standardisert med katalog i `content/sites/site-catalog.ts` og felles oppslag i `content/sites/index.ts`.
+  - Dynamisk sidevisning i `app/[site]/page.tsx` + felles mal i `components/sites/site-landing-page.tsx`.
+- Verifisering etter endringer:
+  - `npm run lint` bestått.
+  - `npm run build` bestått.
+- Driftsteknisk forbedring:
+  - Migrert fra `middleware.ts` til `proxy.ts` for å følge ny Next.js-konvensjon og fjerne deprecation-varsel.
+- Oppgave `document-and-verify` gjennomfort:
+  - Strategidokumenter oppdatert (`MASTER_STRATEGI.md`, `PROSJEKT_LOGG.md`, `MAX_KUNNSKAP.md`).
+  - End-to-end API-flyt testet lokalt:
+    - `POST /api/leads` verifisert (lead opprettes og returnerer `leadId`).
+    - `GET /api/leads` verifisert med gyldig admin-session-cookie (signert JWT).
+    - `PATCH /api/leads/:id` verifisert med statusendring + notat.
+    - `GET /api/leads/:id` verifisert med aktivitetshistorikk (`created`, `status`, `note`).
+  - Deploy-klargjoring sjekket:
+    - `npm run lint` bestatt.
+    - `npm run build` bestatt.
+    - Verifisert at alle MVP-ruter bygges (`/admin`, `/admin/login`, `/api/leads`, `/api/leads/[id]`, `/api/admin/login`, `/api/admin/logout`).
+- Domene- og informasjonsarkitektur justert:
+  - `app/page.tsx` endret fra nisje-landingsside til hovedside for MAXAI-systemet.
+  - Forsiden viser nå plattformposisjonering + navigasjon til admin og nisjesider.
+  - Nisjeinnhold beholdes i `app/[site]/page.tsx` som egne undersider i multi-site-strukturen.
+
+## 2026-04-18 (PostgreSQL + Vercel-klargjøring)
+- Migrert database fra SQLite til **PostgreSQL** for varig lagring og deploy på Vercel.
+- `prisma/schema.prisma`: `provider = "postgresql"`; tilkoblings-URL ligger i `prisma.config.ts` (ikke i schema, jf. Prisma 7).
+- Ny baseline-migrering: `prisma/migrations/20260218120000_postgresql_init/`.
+- `lib/prisma.ts`: `PrismaClient` med `@prisma/adapter-pg` og `pg`.
+- Fjernet `better-sqlite3` og `@prisma/adapter-better-sqlite3`.
+- `scripts/mcp/daily-improvements.ts` (kjøres med `tsx`) bruker Prisma i stedet for direkte SQLite.
+- `vercel.json`: `buildCommand` satt til `prisma migrate deploy && next build`.
+- `package.json`: `postinstall` = `prisma generate`; `db:migrate` = `prisma migrate deploy`.
+- Oppdatert dokumentasjon: `MVP_STACK.md`, `MASTER_STRATEGI.md`, `MAX_KUNNSKAP.md`, `PRE_DEPLOY_RUNBOOK.md`, `.env.example`.
+- Verifisering: `npm run lint` og `npm run build` bestått (med gyldig `DATABASE_URL` i `.env` for runtime; `prisma generate` fungerer uten).
+- Viktig for lokal drift: oppdater `.env` med `DATABASE_URL` fra Neon e.l.; gammel SQLite-`dev.db` brukes ikke lenger av appen.

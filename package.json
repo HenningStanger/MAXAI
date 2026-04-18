@@ -6,19 +6,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "prisma generate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "db:migrate": "prisma migrate deploy",
+    "mcp:daily-report": "tsx scripts/mcp/daily-improvements.ts"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
+    "bcryptjs": "^3.0.3",
+    "pg": "^8.14.1",
+    "jose": "^6.2.2",
     "next": "^16.2.4",
+    "prisma": "^7.7.0",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.2",
+    "@types/pg": "^8.11.11",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.3",
+    "@tailwindcss/postcss": "^4.1.14",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@tailwindcss/postcss": "^4.1.14",
     "autoprefixer": "^10.5.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.4",

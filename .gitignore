@@ -19,8 +19,22 @@ yarn-error.log*
 pnpm-debug.log*
 
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.vercel
+
+/app/generated/prisma
+/generated/prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+
+# local sqlite i rot (eldre dev)
+/dev.db
+/dev.db-journal
+
+# genererte MCP-rapporter (kan regenereres)
+reports/continuous-improvement/

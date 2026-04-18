@@ -1,0 +1,29 @@
+{
+  "name": "continuous-improvement-worker",
+  "version": "0.1.0",
+  "purpose": "Kontinuerlig analyse og forbedring av leadflyt og konvertering",
+  "schedule": {
+    "health_check": "0 */6 * * *",
+    "daily_improvements": "0 8 * * *",
+    "weekly_review": "0 9 * * 1"
+  },
+  "pipelines": [
+    "collect_kpi_snapshot",
+    "detect_bottlenecks",
+    "rank_improvements",
+    "propose_experiments",
+    "evaluate_previous_changes"
+  ],
+  "kpis": [
+    "new_leads_weekly",
+    "contact_within_24h_rate",
+    "meeting_rate",
+    "customer_rate",
+    "conversion_rate_by_page"
+  ],
+  "constraints": [
+    "do_not_auto_deploy_without_approval",
+    "one_experiment_per_page_at_a_time",
+    "require_expected_impact_and_measurement_window"
+  ]
+}

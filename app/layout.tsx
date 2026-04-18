@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
+
 export const metadata: Metadata = {
-  title: "Regnskap for bygg i Stavanger | MAXAI",
+  title: "MAXAI | Leadsmaskin for markedsføring",
   description:
-    "Spesialisert regnskap for bygg og entreprenor i Stavanger. Fa kontroll pa prosjektokonomi, MVA og marginer."
+    "Bygg landingssider, skaler organisk og annonsering, og følg leads til kunde — i ett system."
 };
 
 export default function RootLayout({
@@ -13,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="no">
-      <body>{children}</body>
+    <html lang="no" className={inter.variable}>
+      <body className={`${inter.className} antialiased`}>{children}</body>
     </html>
   );
 }

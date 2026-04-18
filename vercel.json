@@ -1,0 +1,9 @@
+{
+  "buildCommand": "prisma migrate deploy && next build",
+  "crons": [
+    {
+      "path": "/api/mcp/daily-improvements",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
