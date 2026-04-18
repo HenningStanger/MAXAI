@@ -1,0 +1,17 @@
+# Lokal Postgres for utvikling (ikke for Vercel-produksjon).
+# Start: docker compose up -d
+# Stopp: docker compose down
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: maxai
+      POSTGRES_PASSWORD: maxai_dev_local
+      POSTGRES_DB: maxai
+    volumes:
+      - maxai_pgdata:/var/lib/postgresql/data
+
+volumes:
+  maxai_pgdata:
