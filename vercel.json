@@ -1,5 +1,5 @@
 {
-  "buildCommand": "prisma migrate deploy && next build",
+  "buildCommand": "npx prisma migrate deploy && npm run build",
   "crons": [
     {
       "path": "/api/mcp/daily-improvements",
