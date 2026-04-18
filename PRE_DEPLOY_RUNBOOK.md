@@ -16,6 +16,7 @@ Bruk denne sjekklisten hver gang før produksjonsdeploy.
 ## 1b) Vercel (første gang)
 - Koble Git-repo og sett alle miljøvariabler i Vercel-prosjektet (Production + Preview om nødvendig).
 - **`DATABASE_URL` må være tilgjengelig under build** (samme verdi som i runtime). I Vercel: Settings → Environment Variables → velg miljø og bekreft at variabelen ikke er «Runtime only» hvis du får feil ved `prisma migrate deploy`.
+- **Neon:** legg inn **`DIRECT_URL`** (direkte tilkobling uten pooler) i Vercel for **build** og migrering. `prisma migrate deploy` bruker `DIRECT_URL` hvis den finnes, ellers `DATABASE_URL`. Uten direkte URL feiler migrering ofte med exit code 1.
 - `vercel.json` bruker `buildCommand`: `npx prisma migrate deploy && npm run build` slik at migrering kjører før `next build`.
 - Neon: bruk connection string med `?sslmode=require` (eller leverandørens anbefalte parametere).
 - Etter første vellykkede deploy: verifiser tabeller i Neon/Postgres (eller kjør `npx prisma migrate status` med samme `DATABASE_URL` lokalt).

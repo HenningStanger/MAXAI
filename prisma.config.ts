@@ -3,12 +3,20 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+/**
+ * Migrering (`prisma migrate deploy`) trenger direkte Postgres-tilkobling.
+ * Neon: bruk «Direct»-URL som DIRECT_URL; bruk «Pooled» som DATABASE_URL i appen.
+ * Andre leverandører: sett kun DATABASE_URL, eller sett begge til samme verdi.
+ */
+const migrateDatabaseUrl =
+  process.env["DIRECT_URL"] ?? process.env["DATABASE_URL"];
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: migrateDatabaseUrl,
   },
 });
