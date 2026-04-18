@@ -1,4 +1,4 @@
-# Lokal Postgres for utvikling (ikke for Vercel-produksjon).
+# VALGFRITT: Lokal Postgres uten Neon. Standard for dette prosjektet er Neon – se PRE_DEPLOY_RUNBOOK.md.
 # Start: docker compose up -d
 # Stopp: docker compose down
 services:

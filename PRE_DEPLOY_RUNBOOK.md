@@ -2,11 +2,14 @@
 
 Bruk denne sjekklisten hver gang før produksjonsdeploy.
 
-## Lokal utvikling med Postgres (Docker)
-- Installer [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Mac).
-- I prosjektmappen: `docker compose up -d`
-- `.env` skal peke på `127.0.0.1:5433` (se `docker-compose.yml` og `.env.example`).
-- Kjor `npx prisma migrate deploy`, deretter `npm run dev`.
+## Lokal utvikling med Neon (anbefalt)
+- Opprett gratis database i [Neon Console](https://console.neon.tech) (eller bruk eksisterende prosjekt).
+- Under **Connect**: kopier **Pooled** → `DATABASE_URL` i `.env`, og **Direct** → `DIRECT_URL` (migrering krever direct).
+- I prosjektmappen: `npx prisma migrate deploy`, deretter `npm run dev`.
+- Bruk **samme to variabler** i Vercel som i `.env` (Production + Preview etter behov).
+
+## Lokal Postgres med Docker (valgfritt)
+- Kun hvis du ikke vil bruke Neon lokalt: installer [Docker Desktop](https://www.docker.com/products/docker-desktop/), kjør `docker compose up -d`, og sett `DATABASE_URL` / `DIRECT_URL` til `127.0.0.1:5433` som i `docker-compose.yml`.
 
 ## 1) Miljo og hemmeligheter
 - `DATABASE_URL` skal være en **PostgreSQL**-URL (f.eks. Neon). Bruk gjerne **pooled** connection string på Vercel og `?sslmode=require` der leverandøren krever det.

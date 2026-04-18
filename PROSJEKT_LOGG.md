@@ -103,3 +103,4 @@
 - Oppdatert dokumentasjon: `MVP_STACK.md`, `MASTER_STRATEGI.md`, `MAX_KUNNSKAP.md`, `PRE_DEPLOY_RUNBOOK.md`, `.env.example`.
 - Verifisering: `npm run lint` og `npm run build` bestått (med gyldig `DATABASE_URL` i `.env` for runtime; `prisma generate` fungerer uten).
 - Viktig for lokal drift: oppdater `.env` med `DATABASE_URL` fra Neon e.l.; gammel SQLite-`dev.db` brukes ikke lenger av appen.
+- Standard databaseløsning dokumentert som **Neon** (Pooled + Direct i `.env`); Docker (`docker-compose.yml`) kun valgfritt for lokal Postgres uten Neon.
