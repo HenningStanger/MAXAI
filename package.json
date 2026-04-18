@@ -14,7 +14,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
-    "mcp:daily-report": "tsx scripts/mcp/daily-improvements.ts"
+    "mcp:daily-report": "tsx scripts/mcp/daily-improvements.ts",
+    "vercel": "vercel",
+    "vercel:prod": "vercel --prod"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
@@ -41,6 +43,7 @@
     "eslint-config-next": "^16.2.4",
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.2",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vercel": "^41.0.0"
   }
 }

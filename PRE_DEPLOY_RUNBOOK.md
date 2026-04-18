@@ -22,6 +22,12 @@ Bruk denne sjekklisten hver gang før produksjonsdeploy.
 - Verifiser at `AUTH_SECRET` er lang og tilfeldig.
 - Verifiser at `ADMIN_PASSWORD_HASH` er bcrypt-hash (ikke klartekst).
 
+## Vercel CLI (valgfritt)
+- CLI er installert som dev-avhengighet. Første gang: `npx vercel login` (åpner nettleser).
+- Forhåndsvisning: `npm run vercel` (lokal deploy til preview-URL).
+- Produksjon: `npm run vercel:prod` (krever at prosjektet allerede er koblet til Vercel / team).
+- Miljøvariabler må fortsatt settes i Vercel Dashboard (eller `vercel env pull` / `vercel env add`).
+
 ## 1b) Vercel (første gang)
 - Koble Git-repo og sett alle miljøvariabler i Vercel-prosjektet (Production + Preview om nødvendig).
 - **`DATABASE_URL` må være tilgjengelig under build** (samme verdi som i runtime). I Vercel: Settings → Environment Variables → velg miljø og bekreft at variabelen ikke er «Runtime only» hvis du får feil ved `prisma migrate deploy`.
